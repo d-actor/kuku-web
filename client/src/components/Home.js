@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Header, Image, Segment } from 'semantic-ui-react';
 import MainLogo from '../images/header-logo.png';
 
+//this is a comment
+
 class Home extends Component {
   render() {
     return (
