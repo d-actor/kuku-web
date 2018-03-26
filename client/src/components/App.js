@@ -3,6 +3,7 @@ import NoMatch from './NoMatch';
 import NavBar from './NavBar';
 import Login from './Login';
 import Register from './Register';
+import Products from './Products';
 import Flash from './Flash';
 import Home from './Home';
 import ProtectedRoute from './ProtectedRoute';
@@ -22,6 +23,7 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <AuthRoute exact path='/login' component={Login} />
             <AuthRoute exact path='/register' component={Register} />
+            <AuthRoute exact path= '/products' component= {Products}/>
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>
