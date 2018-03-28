@@ -33,7 +33,7 @@ class Home extends Component {
         <Container style={styles.middleContainer}>
           <Divider />
           <ButtonLink>
-            <Link to="/" style={{ color: 'white' }}>Test It Out For Free!</Link>
+            <Link to="/products" style={{ color: 'white' }}>Test It Out For Free!</Link>
           </ButtonLink>
         <Grid>
           <Grid.Row centered columns={3}>

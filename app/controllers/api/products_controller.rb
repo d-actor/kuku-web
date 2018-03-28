@@ -2,7 +2,7 @@ class Api::ProductsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render json: Product.random_product(current_user.loved)
+    render json: Product.all
   end
 
   def my_products

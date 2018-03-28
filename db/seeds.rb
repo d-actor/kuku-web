@@ -6,6 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+
+
 products = [ {
   alt1: "https://cdn.shopify.com/s/files/1/0626/0625/products/KANZEK_Brown_15in_Leather_Laptop_Bag_-_The_Dollar_Gent_Briefcase_-_Vintage_Cognac-_Interior_720x.png?v=1513123787",
   body: "With its unique Vintage look, the Vintage Cognac version of The Dollar Gent Briefcase is the perfect leather laptop briefcase for business people wanting a casual and original look in a professional environment. This bag is 40 cm (15.6\") in Width x 27 (10.5\") in Height x 6 (2.3\") in Depth and is perfect for 15.6\" laptops including MacBooks, and weighs only 1 Kg. The bag has one exterior pocket, two large inner pouches, a pen holder, a wallet-like business cards holder.",

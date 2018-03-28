@@ -1,8 +1,7 @@
 class Api::CartsController < ApplicationController
-  
   before_action :set_cart, only: [:show, :update, :destroy]
   before_action :authenticate_user!
-  
+
   def index
     render json: Cart.all
   end
@@ -11,7 +10,7 @@ class Api::CartsController < ApplicationController
     render json: @cart
   end
 
-  
+
   def create
     cart = Cart.create(cart_params)
     if Cart.save
@@ -42,6 +41,6 @@ def cart_params
   params.require(:cart).permit(:add_date, :items_count, :total_price)
 end
 
-def set_cart 
+def set_cart
   @cart = Cart.find(params[:id])
 end
