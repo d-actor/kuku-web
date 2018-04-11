@@ -1,19 +1,14 @@
 //React
 import React, { Component } from 'react';
 // Styles 
-import { Header, Form, Button, Segment, Container, Image } from 'semantic-ui-react';
+import { Header, Form, Button, Segment, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../actions/auth';
-import { setFlash } from '../actions/flash';
 import styled from 'styled-components';
 import Tshirt1 from '../images/home/tshirt.jpg';
-import Tshirt2 from '../images/home/tshirt2.jpg';
-import Tshirt3 from '../images/home/tshirt3.jpg';
-import Tshirt4 from '../images/home/tshirt4.jpg';
-import { Link } from 'react-router-dom'
 
 class Login extends Component {
-  state = {email: '', password: '',randomImages:[Tshirt1, Tshirt2, Tshirt3, Tshirt4]};
+  state = {email: '', password: ''};
 
   handleSubmit = event => {
     event.preventDefault();
@@ -30,90 +25,84 @@ class Login extends Component {
     this.setState({ [id]: value });
   }
 
-  displayImage = () =>{
-    let num = Math.floor(Math.random() * 3);
-    let image = this.state.randomImages[num];
-    return (
-      <Image src={image}/>
-    ) 
-  }
+
 
   render() {
     const {email, password} = this.state;
 
     return (
       <div>
-      <RightContainer>
+        <RightContainer>
           <Segment basic>
-            {this.displayImage()}
+            <Image src= {Tshirt1} />
           </Segment>
         </RightContainer>
-      <LeftContainer>
-        <Segment basic>
-          <Header as='h1' textAlign='center'>Go Kuku Login</Header>
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Field>
-              <label htmlFor='email'>Email</label>
-              <input
-                id='email'
-                placeholder='Email'
-                required
-                value={email}
-                onChange={this.handleChange}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label htmlFor='password'>Password</label>
-              <input
-                id='password'
-                placeholder='Password'
-                type='password'
-                required
-                value={password}
-                onChange={this.handleChange}
-              />
-            </Form.Field>
+        <LeftContainer>
+          <Segment basic>
+            <Header as='h1' textAlign='center'>Go Kuku Login</Header>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Field>
+                <label htmlFor='email'>Email</label>
+                <input
+                  id='email'
+                  placeholder='Email'
+                  required
+                  value={email}
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+              <Form.Field>
+                <label htmlFor='password'>Password</label>
+                <input
+                  id='password'
+                  placeholder='Password'
+                  type='password'
+                  required
+                  value={password}
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+              <Segment basic textAlign='center'>
+                <Button type='submit'>Login</Button>
+              </Segment>
+            </Form>
             <Segment basic textAlign='center'>
-              <Button type='submit'>Login</Button>
+              - or -
+              < br/>
+              login with
             </Segment>
-          </Form>
-          <Segment basic textAlign='center'>
-            - or -
-            < br/>
-            login with 
+            <Segment basic textAlign='center'>
+              <Button
+                class="huge ui facebook button"
+                style={stylesfb.btn}
+              >
+                <i class="facebook icon"></i>
+                Facebook
+              </Button>
+              <Button
+                class="huge ui twitter button"
+                style={stylestw.btn}
+              >
+                <i class="twitter icon"></i>
+                Twitter
+              </Button>
+            </Segment>
           </Segment>
-          <Segment basic textAlign='center'>
-          <Button 
-            class="huge ui facebook button"
-            style={stylesfb.btn}
-          >
-          <i class="facebook icon"></i>
-          Facebook
-          </Button>
-          <Button 
-            class="huge ui twitter button"
-            style={stylestw.btn}
-          >
-          <i class="twitter icon"></i>
-          Twitter
-          </Button>
-          </Segment>
-        </Segment>
-      </LeftContainer>
+        </LeftContainer>
       </div>
     );
   }
 }
 
 
-//Styled Components 
+//Styled Components
 const LeftContainer = styled.div`
   background: white;
   width: 50%;
   float: left;
 `
 //appcontainerRight
-const RightContainer = styled.div` 
+const RightContainer = styled.div`
   background: white;
   width: 50%;
   float: right;
@@ -123,7 +112,7 @@ const stylestw = {
     backgroundColor: '#55acee',
     color: '#fff',
     textAlign: 'center'
-    
+
   },
 }
 
@@ -132,8 +121,26 @@ const stylesfb = {
     backgroundColor: '#3b5998',
     color: '#fff',
     textAlign: 'center'
-    
   },
 }
 
 export default connect()(Login);
+
+
+
+
+//T-shirts, state, and function to display random image if we want to figure out the bug
+
+// import Tshirt2 from '../images/home/tshirt2.jpg';
+// import Tshirt3 from '../images/home/tshirt3.jpg';
+// import Tshirt4 from '../images/home/tshirt4.jpg';
+
+// randomImages:[Tshirt1, Tshirt2, Tshirt3, Tshirt4]}
+
+// displayImage = () =>{
+//   let num = Math.floor(Math.random() * 3);
+//   let image = this.state.randomImages[num];
+//   return (
+//     <Image src={image}/>
+//   )
+// }

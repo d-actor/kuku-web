@@ -14,7 +14,8 @@ class CreateProducts < ActiveRecord::Migration[5.1]
       t.string :address
       t.string :link
       t.string :logo
-      
+      t.boolean :show_product, :default => true
+
       t.timestamps
     end
   end

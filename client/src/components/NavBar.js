@@ -11,6 +11,9 @@ class NavBar extends Component {
     if (user.id) {
       return (
         <Menu.Menu position='right'>
+          <Menu.Item>
+            <Link to='/my_products' style={{ color: '#ffffff' }}>My Loved Products</Link>
+          </Menu.Item>
           <Menu.Item
             name='Logout'
             style={styles.text}
@@ -37,6 +40,12 @@ class NavBar extends Component {
         <Menu pointing secondary>
           <Link to='/'>
             <Menu.Item style={styles.text} name='home' />
+          </Link>
+          <Link to='/products'>
+            <Menu.Item style={styles.text} name='List Items' />
+          </Link>
+          <Link to='/products/1'>
+            <Menu.Item style={styles.text} name='Go KUKU' />
           </Link>
           { this.rightNavs() }
         </Menu>

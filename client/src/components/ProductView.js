@@ -1,53 +1,183 @@
-// I need to figure out a way to make the card(s) a fixed size
-//so the hover effect doesnt change the size of the card, only the visualization. 
-
-
+//React
 import React from 'react';
-
-import { Card, Icon, Image, Button, Segment, Reveal, Header, Container } from 'semantic-ui-react';
-import Tshirt from '../images/home/tshirt.jpg'
+//Redux
+import { connect } from 'react-redux';
+import { setHeaders } from '../actions/headers';
+//Axios
+import axios from 'axios';
+//Modal
+import Modal from 'react-responsive-modal';
+//Semantic-ui, styling
 import styled from 'styled-components';
+import {
+  Card,
+  Icon,
+  Image,
+  Button,
+  Header,
+  Dimmer,
+  Grid,
+} from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
 
 
-const productView = () => (
-  <SegmentTotal>
-{/*Image Card */}
-    <Reveal animated='fade'>
-      <Reveal.Content visible>
-        <ContainerU >
-          <Image src = {Tshirt} />
-        </ContainerU>
-      </Reveal.Content>
-{/*Description Card */}
-      <Reveal.Content hidden>
-        <ContainerL>
-          Description
-        </ContainerL>
-      </Reveal.Content>
-    </Reveal>
-  </SegmentTotal> 
-)
 
+class ProductView extends React.Component{
+state = { active: false, products: [], open: false }
+  handleShow = () => this.setState({ active: !this.state.active })
 
-//Styled Components 
-const SegmentTotal = styled.div`
-  background: white;
-  width: 60%;
-  height: 60%;
-  textAlign: center;
+  handleLove = (id) => {
+    const { dispatch, history, productIndex, products } = this.props;
+    axios.put(`/api/products/${id}`)
+    axios.put(`/api/show_products/${id}`)
+      .then( res => {
+        dispatch(setHeaders(res.headers))
+        const productListLength = products.length - 1
+        if (productIndex === productListLength) {
+          history.push('/products/')
+        } else {
+          const product = products[productIndex + 1]
+          history.push(`/products/${product.id}`)
+        }
+        this.setState({
+          products: this.state.products.filter( p => p.id !== id )
+        })
+      })
+      .catch( err => {
+        console.log(err)
+      })
+  }
+
+  handleHate = (id) => {
+    const { dispatch, history, productIndex, products } = this.props;
+    axios.put(`/api/hated_items/${id}`)
+    axios.put(`/api/show_products/${id}`)
+      .then( res => {
+        dispatch(setHeaders(res.headers))
+      })
+    const productListLength = products.length - 1
+    if (productIndex === productListLength) {
+      history.push('/products/')
+    } else {
+      const product = products[productIndex + 1]
+      history.push(`/products/${product.id}`)
+    }
+    this.setState({
+      products: this.state.products.filter( p => p.id !== id )
+    })
+  }
+
+  onOpenModal = () => {
+    this.setState({ open: true });
+  };
+  
+  onCloseModal = () => {
+    this.setState({ open: false });
+  };
+
+  render() {
+    const { product={}, user} = this.props;
+     const { active, open } = this.state
+  return(
+      <div>
+        <SegmentMain>
+          <GridMain>
+            <Grid container columns={1}>
+            <Grid.Column>
+              <Dimmer.Dimmable as={Card} dimmed={active} fluid>
+                <Dimmer active={active} onClickOutside={this.handleHide}>
+                  <Header as='h1' inverted>
+                    {product.title}
+                  </Header>
+                  <br />
+                  <Header as='h2' inverted>
+                    {product.variant_price}
+                  </Header>
+                  <br />
+                  <Header as='h3' inverted>
+                    {product.vendor}
+                  </Header>
+                  <br />
+                  <Header as='h3' color='teal'>
+                    {product.body}
+                  </Header>
+                </Dimmer>
+              <Header as='h3'>{product.title} </Header>
+                <Card fluid >
+                  <Image src={product.image_src} />
+                    <Card.Content>
+                    <Button
+                      icon
+                      labelPosition='left'
+                      floated='left'
+                      onClick={() =>
+                        user.id === undefined ? this.onOpenModal() : this.handleHate(product.id)
+                      }
+                    >
+                      <Icon name='thumbs down' />
+                      Forget It.
+                    </Button>
+                    <Button
+                      icon
+                      labelPosition='right'
+                      floated='right'
+                      onClick={() =>
+                        user.id === undefined ? this.onOpenModal() : this.handleLove(product.id)
+                      }
+                    >
+                      <Icon name='heart' color='pink' />
+                      Love It!
+                    </Button>
+                    <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
+                      <h2>You are not logged in!</h2>
+                      <p>
+                        Unless you have an account with KUKU, we can't remember what products you like! For the best user experience,
+                        please register and login.
+                      </p>
+                      <Link to={'/register'}>
+                        <Button basic color='teal'>Register</Button>
+                      </Link>
+                      <Link to={'/login'}>
+                        <Button basic color='teal'>Login</Button>
+                      </Link>
+                    </Modal>
+                  </Card.Content>
+                </Card>
+            </Dimmer.Dimmable>
+            <Button.Group compact>
+              <Button onClick={this.handleShow}>
+                { active === false
+                  ?
+                  "Tell Me More"
+                  :
+                  "X"
+                }
+              </Button>
+            </Button.Group>
+              </Grid.Column>
+            </Grid>
+          </GridMain>
+        </SegmentMain>
+      </div>
+   )
+  }
+}
+const GridMain = styled.div`
+  width: 58%
+  height: 58%
+  text-align: center
 `
-
-const ContainerU = styled.div`
-  background: white;
-  width: 60%
-  height: 60%
+const SegmentMain = styled.div`
+  display: flex
+  justify-content: center
 `
-
-const ContainerL = styled.div`
-  background: white;
-  width: 60%
-  height: 60%
-`
-
-
-export default productView
+const mapStateToProps = (state, props) => {
+  const { products } = state
+  return {
+    product: products.find( a => a.id === parseInt(props.match.params.id )),
+    productIndex: products.findIndex( a => a.id === parseInt(props.match.params.id )),
+    products,
+    user: state.user
+  }
+}
+export default connect(mapStateToProps)(ProductView)

@@ -5,7 +5,9 @@ class User < ActiveRecord::Base
           :omniauthable
   include DeviseTokenAuth::Concerns::User
 
-  serialize :loved, Array
+  serialize :loved_products, Array
+  serialize :show_products, Array
+  serialize :hated_items, Array
 
   def self.loved(ids)
     ids = ids.empty? ? [0] : ids
@@ -15,5 +17,10 @@ class User < ActiveRecord::Base
   def self.random_product(ids)
     ids = ids.empty? ? [0] : ids
     Product.where("id NOT IN (?)", ids).order("RANDOM()")
+  end
+
+  def self.hated(ids)
+    ids = ids.empty? ? [0] : ids
+    Product.where("id IN (?)", ids)
   end
 end

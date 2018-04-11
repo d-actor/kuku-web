@@ -1,19 +1,17 @@
 //React
 import React, { Component } from 'react';
 // Styles 
-import { Header, Form, Button, Segment, Container, Image } from 'semantic-ui-react';
+import { Header, Form, Button, Segment, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { registerUser } from '../actions/auth';
 import { setFlash } from '../actions/flash';
 import styled from 'styled-components';
-import Tshirt1 from '../images/home/tshirt.jpg';
 import Tshirt2 from '../images/home/tshirt2.jpg';
-import Tshirt3 from '../images/home/tshirt3.jpg';
-import Tshirt4 from '../images/home/tshirt4.jpg';
+
 
 
 class Register extends Component {
-  state = {name:'', email: '', password: '', passwordConfirmation: '', randomImages:[Tshirt1, Tshirt2, Tshirt3, Tshirt4]};
+  state = {name:'', email: '', password: '', passwordConfirmation: '' };
   handleSubmit = event => {
     event.preventDefault();
     const { name, email, password, passwordConfirmation } = this.state;
@@ -31,14 +29,6 @@ class Register extends Component {
     this.setState({ [id]: value });
   }
 
-  displayImage = () =>{
-    let num = Math.floor(Math.random() * 3);
-    let image = this.state.randomImages[num];
-    return (
-      <Image src={image}/>
-    ) 
-  }
-
   render() {
     const {name, email, password, passwordConfirmation } = this.state;
 
@@ -46,7 +36,7 @@ class Register extends Component {
       <div>
         <AppContainerR>
           <Segment basic>
-            {this.displayImage()}
+            <Image src={Tshirt2} />
           </Segment>
         </AppContainerR>
         <AppContainer>
@@ -120,3 +110,21 @@ const AppContainerR = styled.div`
 `
 
 export default connect()(Register);
+
+// tshirts state,and function to display random images if we want to fix bug:
+
+// import Tshirt1 from '../images/home/tshirt.jpg';
+// import Tshirt3 from '../images/home/tshirt3.jpg';
+// import Tshirt4 from '../images/home/tshirt4.jpg';
+
+// randomImages:[Tshirt1, Tshirt2, Tshirt3, Tshirt4]}
+
+
+// displayImage = () =>{
+//   let num = Math.floor(Math.random() * 3);
+//   let image = this.state.randomImages[num];
+//   return (
+//     <Image src={image}/>
+//   ) 
+// }
+
