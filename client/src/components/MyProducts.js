@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Card,
   Image,
+  Icon,
   Button,
   Container
 } from 'semantic-ui-react';
@@ -45,51 +46,90 @@ class MyProducts extends React.Component {
 
   render() {
     const { products } = this.state;
+    if (products.length === 0)
     return (
-      <ItemsList>
-        <Container>
-          <Card.Group
-            computer={8}
-            mobile={2}
-            tablet={4}
-          >
-            { products.map( p =>
-              <Card style={styles.cardStyle} key={p.id}>
-                <h2>{p.name}</h2>
-                 <Image style={styles.images} src={p.alt1} />
-               <Card.Content>
-                <Card.Header>
-                {p.title}
-                </Card.Header>
-                <Card.Header>
-                 {p.variant_price}
-                </Card.Header>
-                 <Card.Description>
-                   {p.vendor}
-                 </Card.Description>
-                 <Link to= {`/products/${p.id}`}>
-                   <Button
-                     fluid
-                     color='teal'
-                   >
-                     View Product Details
-                   </Button>
-                 </Link>
-                   <Button
-                     icon
-                     centered
-                     >
-                     <Link to={p.link} target="_blank">Buy it Now!</Link>
-                   </Button>
-                   <Button
-                     icon
-                     centered
-                     onClick={() => this.handleClick(p.id)}
+      <div>
+        <h1
+          style={styles.text}
+          textAlign='center'
+        >
+          "I'm all out of love, I'm so lost without you!"
+        </h1>
+        <p
+          style={styles.text}
+          textAlign='center'
+        >
+          Go ahead and keep on shopping by<Link to='/products'> clicking here.</Link>
+        </p>
+      </div>
+    )
+      return (
+        <ItemsList>
+          <Container>
+            <Card.Group
+              computer={8}
+              mobile={2}
+              tablet={4}
+              centered
+            >
+              {products.map( p =>
+                <Card style={styles.cardStyle} key={p.id}>
+                  <h2>{p.name}</h2>
+                  <Image style={styles.images} src={p.alt1} />
+                  <Card.Content>
+                    <Card.Header>
+                      {p.title}
+                    </Card.Header>
+                    <Card.Header>
+                    {p.variant_price}
+                    </Card.Header>
+                    <Card.Description>
+                      {p.vendor}
+                    </Card.Description>
+                    <Link to= {`/products/${p.id}`}>
+                      <Button
+                        fluid
+                        color='teal'
+                      >
+                        View Product Details
+                      </Button>
+                    </Link>
+                    <Button
+                      icon
+                      size='large'
+                      animated='fade'
+                      centered
+                      floated='left'
                     >
-                    Remove Item
+                      <Button.Content visible>
+                        <Link
+                          to={p.link}
+                          target="_blank"
+                          rel='noopener noreferrer'
+                          style={{ color: '#4d4d4d' }}
+                        >
+                          Buy Item
+                        </Link>
+                      </Button.Content>
+                      <Button.Content hidden>
+                        <Icon name="check" color="green" />
+                      </Button.Content>
                     </Button>
-               </Card.Content>
-             </Card>
+                    <Button
+                      icon
+                      size='large'
+                      animated='fade'
+                      centered
+                      floated='right'
+                      onClick={() => this.handleClick(p.id)}
+                    >
+                      <Button.Content visible>Remove Item</Button.Content>
+                      <Button.Content hidden>
+                        <Icon name="trash" />
+                      </Button.Content>
+                    </Button>
+                 </Card.Content>
+               </Card>
               )
             }
           </Card.Group>
@@ -100,14 +140,14 @@ class MyProducts extends React.Component {
 }
 
 const styles = {
+  text: {
+    color: "#FFF",
+  },
   cardStyle: {
     display: 'block',
-    width: '20vw',
-    height: '30vw',
   },
   images: {
-    height: '15vw',
-    alignSelf: 'center'
+    height: '12vw',
   }
 }
 

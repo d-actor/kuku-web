@@ -17,14 +17,22 @@ import {
   Header,
   Dimmer,
   Grid,
+  Divider,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 
-
-
 class ProductView extends React.Component{
-state = { active: false, products: [], open: false }
+  state = { active: false, products: [], open: false }
   handleShow = () => this.setState({ active: !this.state.active })
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    axios.get('/api/my_products')
+      .then( res => {
+        dispatch(setHeaders(res.headers));
+        this.setState({ products: res.data })
+      });
+  }
 
   handleLove = (id) => {
     const { dispatch, history, productIndex, products } = this.props;
@@ -70,15 +78,15 @@ state = { active: false, products: [], open: false }
   onOpenModal = () => {
     this.setState({ open: true });
   };
-  
+
   onCloseModal = () => {
     this.setState({ open: false });
   };
 
   render() {
     const { product={}, user} = this.props;
-     const { active, open } = this.state
-  return(
+    const { active, open } = this.state
+    return(
       <div>
         <SegmentMain>
           <GridMain>
@@ -89,13 +97,16 @@ state = { active: false, products: [], open: false }
                   <Header as='h1' inverted>
                     {product.title}
                   </Header>
+                  <Header as='h2' inverted>
+                    {product.variety}
+                  </Header>
                   <br />
                   <Header as='h2' inverted>
                     {product.variant_price}
                   </Header>
                   <br />
                   <Header as='h3' inverted>
-                    {product.vendor}
+                     Made By: {product.vendor}
                   </Header>
                   <br />
                   <Header as='h3' color='teal'>
@@ -108,25 +119,31 @@ state = { active: false, products: [], open: false }
                     <Card.Content>
                     <Button
                       icon
-                      labelPosition='left'
+                      size='big'
+                      animated='fade'
                       floated='left'
                       onClick={() =>
                         user.id === undefined ? this.onOpenModal() : this.handleHate(product.id)
                       }
                     >
-                      <Icon name='thumbs down' />
-                      Forget It.
+                      <Button.Content hidden>
+                        <Icon name='thumbs down' color='red' />
+                      </Button.Content>
+                      <Button.Content visible>Dislike</Button.Content>
                     </Button>
                     <Button
                       icon
-                      labelPosition='right'
+                      size='big'
+                      animated='fade'
                       floated='right'
                       onClick={() =>
                         user.id === undefined ? this.onOpenModal() : this.handleLove(product.id)
                       }
                     >
-                      <Icon name='heart' color='pink' />
-                      Love It!
+                      <Button.Content hidden>
+                        <Icon name='heart' color='pink' />
+                      </Button.Content>
+                      <Button.Content visible>Love It!</Button.Content>
                     </Button>
                     <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
                       <h2>You are not logged in!</h2>
@@ -143,25 +160,26 @@ state = { active: false, products: [], open: false }
                     </Modal>
                   </Card.Content>
                 </Card>
-            </Dimmer.Dimmable>
-            <Button.Group compact>
-              <Button onClick={this.handleShow}>
-                { active === false
-                  ?
-                  "Tell Me More"
-                  :
-                  "X"
-                }
-              </Button>
-            </Button.Group>
-              </Grid.Column>
-            </Grid>
-          </GridMain>
-        </SegmentMain>
-      </div>
-   )
-  }
+              </Dimmer.Dimmable>
+              <Button.Group compact>
+                <Button onClick={this.handleShow}>
+                  { active === false
+                    ?
+                    "Tell Me More"
+                    :
+                    "X"
+                  }
+                </Button>
+              </Button.Group>
+            </Grid.Column>
+          </Grid>
+        </GridMain>
+      </SegmentMain>
+      <Divider />
+    </div>
+  )}
 }
+
 const GridMain = styled.div`
   width: 58%
   height: 58%

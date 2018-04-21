@@ -4,7 +4,7 @@ class Api::ProductsController < ApplicationController
 
   def index
     products = Product.all
-    render json: products.page(params[:page]).per(12)
+    render json: products
   end
 
   def my_products

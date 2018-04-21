@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import Android from '../images/home/Android.png';
 import { Link } from 'react-router-dom';
 
-
 const AppLinks = styled.div`
   display: flex;
   justify-content: space-around;
@@ -23,21 +22,26 @@ const ButtonLink = styled.a`
 `
 
 class Home extends Component {
+
+  getRandomInt = () => {
+      return Math.floor(Math.random() * Math.floor(50));
+  }
+
   render() {
+    let int  = this.getRandomInt()
     return (
       <Segment basic style={ styles.mainContainer}>
         <ButtonLink>
-          <Button fluid color='teal'>
-            <Link to="/products" style={{ color: '#ffffff' }}>Shop Traditionally</Link>
+          <Button fluid color='black'>
+            <Link to="/products" style={styles.text}>Shop Traditionally</Link>
           </Button>
-          <Button fluid color='teal'>
-            <Link to="/products/32" style={{ color: '#ffffff' }}>Go KUKU!</Link>
+          <Button fluid color='black'>
+            <Link to={`/products/${int}`} style={styles.text}>Go KUKU!</Link>
           </Button>
         </ButtonLink>
         <br/>
-        <Image style={styles.image} height="fill" fluid centered src={Tshirt} />
+        <Image style={styles.image} height="20" fluid centered src={Tshirt} />
         <br/>
-        <Button compact basic fluid color='teal'>What Is KUKU?</Button>
         <Container style={styles.middleContainer}>
           <Divider />
           <Grid>
@@ -57,7 +61,7 @@ class Home extends Component {
                 tablet={8}
               >
                 <h2>Try a Fun New Way To Shop.</h2>
-                <p>Why must they do that hack up furballs yet use lap as chair thinking longingly about tuna brine you have cat to be kitten me right meow but hit you unexpectedly but climb a tree. Soft kitty warm kitty little ball of furr purrrrrr find empty spot in cupboard and sleep all day milk the cow for white cat sleeps on a black shirt destroy the blinds and all of a sudden cat goes crazy. </p>
+                <p>KUKU is your one stop shop for all your needs. When you go KUKU, your favorite shopping places all come to you in one spot. Browse through all items one by one to see what comes around (AKA 'GOING KUKU'), or you can shop the traditional way. Then once you find the items you love, all you have to do is show some love and we'll give it right back. Make your life easier by going a little KUKU!</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -69,7 +73,7 @@ class Home extends Component {
                 tablet={8}
               >
                 <h2>Like Tinder But Every Match Is A Winner!</h2>
-                <p>Hodor hodor - hodor... Hodor hodor hodor hodor hodor. Hodor. Hodor hodor - hodor, hodor. Hodor hodor hodor! Hodor, hodor - hodor?! Hodor hodor - hodor... Hodor hodor hodor, hodor, hodor hodor. Hodor! Hodor hodor, HODOR hodor, hodor hodor... Hodor hodor hodor. Hodor, hodor, hodor. Hodor HODOR hodor, hodor HODOR hodor, hodor hodor. Hodor. Hodor. Hodor hodor; hodor hodor? </p>
+                <p>Everyone is well aware of the simplicity of the Dating app Tinder. Sometimes, when you find your love at first sight, they might not love you back. When you go KUKU, every time you swipe right, so do we. We promise to keep this love train going as long as you do. It is about time there's a little more love in the world.</p>
               </Grid.Column>
               <Grid.Column
                 computer={8}
@@ -112,6 +116,9 @@ class Home extends Component {
 }
 
 const styles = {
+  text: {
+    color: '#ffffff',
+  },
   main: {
     color: "#FFF",
   },
@@ -127,8 +134,17 @@ const styles = {
   },
   appIcon:{
     width: '160px'
-  }
-
+  },
+  btns:{
+    padding: '10px',
+    width: '10vw',
+    height: '5vh',
+  },
+  btnsTOS:{
+    padding: '10px',
+    width: '15vw',
+    height: '5vh',
+  },
 }
 
 export default Home;

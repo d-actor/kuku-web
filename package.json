@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react-responsive-modal": "^2.0.1"
+    "react-responsive-modal": "^2.0.1",
+    "styled-components": "^3.2.5"
   }
 }

@@ -4,6 +4,7 @@ class Api::ShowProductsController < ApplicationController
 
   def update
     @product.update(show_product: !@product.show_product?)
+    current_user.save
   end
 
   private
