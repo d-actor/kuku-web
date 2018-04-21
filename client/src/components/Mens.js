@@ -11,6 +11,8 @@ import {
   Responsive,
   Dimmer,
   Loader,
+  Dropdown,
+  Menu,
 } from 'semantic-ui-react';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -46,6 +48,9 @@ class Mens extends React.Component {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/products/${id}`)
+      .then( res => {
+      dispatch(setHeaders(res.headers))
+    })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -61,6 +66,9 @@ class Mens extends React.Component {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/hated_items/${id}`)
+      .then( res => {
+      dispatch(setHeaders(res.headers))
+    })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -163,10 +171,13 @@ class Mens extends React.Component {
               </Link>
             </Modal>
           </Card>
-        )
+          )
+      } else {
+        return null
       }
     })
   }
+
 
   render() {
     const {loading} = this.state;
@@ -179,6 +190,30 @@ class Mens extends React.Component {
     } else {
       return(
         <Container>
+          <Dropdown text='Filter By Category' icon='filter' centered style={styles.text} floating labeled button>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <Link to='/products' style={{color: '#000000'}}>
+                  <Menu.Item name='All Products' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/womens' style={{color: '#000000'}}>
+                  <Menu.Item name='Womens' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/baby' style={{color: '#000000'}}>
+                  <Menu.Item name='Baby' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/accessories' style={{color: '#000000'}}>
+                  <Menu.Item name='Accessories' />
+                </Link>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <Header
             inverted color = 'teal'
             textAlign='center'
@@ -191,7 +226,7 @@ class Mens extends React.Component {
             mobile={2}
             tablet={4}
             centered>
-              {this.filterWomen()}
+              {this.filterMen()}
           </Card.Group>
        </Container>
       )
@@ -199,26 +234,29 @@ class Mens extends React.Component {
   }
 }
 
-const styles = {
-  background: {
-    backgroundColor: "black",
-  },
-  scroller: {
-    height: '80vh',
-    overflow:'auto'
-  },
-  cardStyle: {
-    display: 'block',
-  },
-  images: {
-    height: '12vw',
-  },
-}
+  const styles = {
+    text: {
+      color: "#FFF",
+    },
+    background: {
+      backgroundColor: "black",
+    },
+    scroller: {
+      height: '80vh',
+      overflow:'auto'
+    },
+    cardStyle: {
+      display: 'block',
+    },
+    images: {
+      height: '12vw',
+    },
+  }
 
 const mapStateToProps = (state, props) => {
   const { products } = state
   const handles = [...new Set(products.map( h => h.handle))]
-  //const vendors = [...new Set(products.map(v => v.vendor))]
+
   return {
     products,
     handles,

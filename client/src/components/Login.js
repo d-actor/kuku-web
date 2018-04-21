@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 //Modal
 import Modal from 'react-responsive-modal';
 // Styles
-import { Header, Form, Button, Segment, Image, Responsive } from 'semantic-ui-react';
+import { Header, Form, Button, Segment, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import {Link} from 'react-router-dom';
 import { handleLogin } from '../actions/auth';
 import styled from 'styled-components';
 import Tshirt1 from '../images/home/tshirt.jpg';

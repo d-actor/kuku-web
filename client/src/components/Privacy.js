@@ -161,7 +161,7 @@ class Privacy extends Component {
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 7}>
             <p>
-              The Act gives you the right to access information held about you. Your right of access can be exercised in accordance with the Act. Any access request may be subject to a fee of £10 to meet our costs in providing you with details of the information we hold about you.
+              The Act gives you the right to access information held about you. Your right of access can be exercised in accordance with the Act. Any access request may be subject to a fee of $10 to meet our costs in providing you with details of the information we hold about you.
             </p>
           </Accordion.Content>
           <Accordion.Title active={activeIndex === 8} index={8} onClick={this.handleClick}>

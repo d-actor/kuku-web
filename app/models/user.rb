@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   serialize :loved_products, Array
   serialize :show_products, Array
   serialize :hated_items, Array
+  serialize :purchased_items, Array
 
   def self.loved(ids)
     ids = ids.empty? ? [0] : ids
@@ -20,6 +21,11 @@ class User < ActiveRecord::Base
   end
 
   def self.hated(ids)
+    ids = ids.empty? ? [0] : ids
+    Product.where("id IN (?)", ids)
+  end
+
+  def self.purchased(ids)
     ids = ids.empty? ? [0] : ids
     Product.where("id IN (?)", ids)
   end

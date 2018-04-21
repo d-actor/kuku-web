@@ -1,6 +1,6 @@
 import {
   USERS,
-} from '../actions/users'
+} from '../actions/user'
 
 const products = (state = [], action ) => {
   switch(action.type) {
@@ -9,7 +9,7 @@ const products = (state = [], action ) => {
     case UPDATE_USER:
     return state.map((u) => {
       if (u.id === action.user.id) {
-        return action.users;
+        return action.user;
       }
       return u;
     });

@@ -19,12 +19,34 @@ export const addUser = (user) => {
   }
 }
 
-export const updateUser = (user) => {
+export const updateUser = (id, user, cb) => {
   return (dispatch) => {
-    axios.put(`/api/user/${user.id}`, { user } )
-      .then ( res => dispatch({ type: UPDATE_USER, user: res.data }))
+    let { name, email } = user;
+    let url = `/api/users/${id}?name=${name}&email=${email}`
+    axios.put(url, user)
+      .then( res => {
+        dispatch({ 
+          type: 'UPDATE_USER', 
+          user: res.data, 
+          headers: res.headers
+        })
+      })
+        .then(cb)
+        .catch((error) => {
+        console.log("Problem updating User", error);
+      
+      });
+
   }
 }
+
+
+// export const updateUser = (id, name) => {
+//   return (dispatch) => {
+//     axios.put(`/api/users/${id}`, { name } )
+//       .then ( res => dispatch({ type: UPDATE_USER, name: res.data }))
+//   }
+// }
 
 export const deleteUser = (id) => {
   return(dispatch) => {

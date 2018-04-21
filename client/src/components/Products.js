@@ -12,17 +12,20 @@ import {
   Button,
   Card,
   Divider,
-  Select,
+  Dropdown,
   Icon,
   Image,
   Responsive,
   Container,
   Dimmer,
   Loader,
+  Header,
+  Menu,
 } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { setHeaders } from '../actions/headers';
 import {getProducts} from '../actions/products';
+import {updateUser} from '../actions/auth';
 
 class Products extends React.Component {
 state = {handle: '', products: [], showProduct: true, page:1, totalPages:0, open: false, loading: true }
@@ -45,86 +48,97 @@ state = {handle: '', products: [], showProduct: true, page:1, totalPages:0, open
     let visible = products;
     if (products.length === 0)
       return (
-        <div>
+        <Container>
           <h1 style={styles.text} textAlign='center'>All out of products.</h1>
           <p style={styles.text} textAlign='center'>If you want to add more products, you can add them back in by <Link to='/my_hated_products'>clicking here.</Link></p>
-        </div>
-      ) if (handle)
-      visible = products.filter( p => p.handle === handle && p.show_product === true )
-      return visible.map( p =>
-        <Card style={styles.cardStyle} key={p.id}>
-          <h2>{p.name}</h2>
-          <Image style={styles.images} src={p.alt1} />
-          <Card.Content>
-            <Card.Header>
-              {p.title}
-            </Card.Header>
+          <Divider hidden />
             <Divider hidden />
-            <Card.Header>
-              {p.variety}
-            </Card.Header>
-            <Divider />
-            <Card.Header>
-              {p.variant_price}
-            </Card.Header>
-            <Card.Description>
-              {p.vendor}
-            </Card.Description>
-          </Card.Content>
-          <Responsive as="Image" minWidth={1000}>
-            <Link to= {`/products/${p.id}`}>
-              <Button
-                fluid
-                color='teal'
-              >
-                View Product Details
-              </Button>
-            </Link>
-          </Responsive>
-          <Card.Content>
-            <Button
-              icon
-              size='big'
-              animated='fade'
-              floated='left'
-              onClick={() =>
-                user.id === undefined ? this.onOpenModal() : this.handleHate(p.id)
-              }
-            >
-              <Button.Content hidden>
-                <Icon name='thumbs down' color='red' />
-              </Button.Content>
-              <Button.Content visible>Dislike</Button.Content>
-            </Button>
-            <Button
-              icon
-              size='big'
-              animated='fade'
-              floated='right'
-              onClick={() =>
-                user.id === undefined ? this.onOpenModal() : this.handleLove(p.id)
-              }
-            >
-              <Button.Content hidden>
-                <Icon name='heart' color='pink' />
-              </Button.Content>
-              <Button.Content visible>Love It!</Button.Content>
-            </Button>
-          </Card.Content>
-          <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
-            <h2>You are not logged in!</h2>
-            <p>
-              Unless you have an account with KUKU, we can't remember what products you like! For the best user experience,
-              please register and login.
-            </p>
-            <Link to={'/register'}>
-              <Button basic color='teal'>Register</Button>
-            </Link>
-            <Link to={'/login'}>
-              <Button basic color='teal'>Login</Button>
-            </Link>
-          </Modal>
-        </Card>
+              <Divider hidden />
+            <Divider hidden />
+        </Container>
+      )
+        if (handle)
+        visible = products.filter( p => p.handle === handle && p.show_product === true )
+        return visible.map( p =>
+          <Card style={styles.cardStyle} key={p.id}>
+            <h2>{p.name}</h2>
+            <StyledImage src={p.alt1} alt={`${p.title}  ${p.variety}`}/>
+            <Card.Content>
+              <Card.Header>
+                {p.title}
+              </Card.Header>
+              <Divider hidden />
+              <Card.Header>
+                {p.variety}
+              </Card.Header>
+              <Divider />
+              <Card.Header>
+                {p.variant_price}
+              </Card.Header>
+              <Card.Description>
+                {p.vendor}
+              </Card.Description>
+            </Card.Content>
+            <Responsive as="Image" minWidth={1000}>
+              <Link to= {`/products/${p.id}`}>
+                <Button
+                  fluid
+                  color='teal'
+                >
+                  View Product Details
+                </Button>
+              </Link>
+            </Responsive>
+            <Card.Content>
+              <Button.Group fluid>
+                <Button
+                  icon
+                  size='big'
+                  animated='fade'
+                  floated='left'
+                  basic
+                  color='grey'
+                  onClick={() =>
+                    user.id === undefined ? this.onOpenModal() : this.handleHate(p.id)
+                  }
+                >
+                  <Button.Content hidden>
+                    <Icon name='thumbs down' color='red' />
+                  </Button.Content>
+                  <Button.Content visible>Dislike</Button.Content>
+                </Button>
+                <Button
+                  icon
+                  basic
+                  color='grey'
+                  size='big'
+                  animated='fade'
+                  floated='right'
+                  onClick={() =>
+                    user.id === undefined ? this.onOpenModal() : this.handleLove(p.id)
+                  }
+                >
+                  <Button.Content hidden>
+                    <Icon name='heart' color='pink' />
+                  </Button.Content>
+                  <Button.Content visible>Love It!</Button.Content>
+                </Button>
+              </Button.Group>
+            </Card.Content>
+            <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
+              <h2>You are not logged in!</h2>
+              <p>
+                Unless you have an account with KUKU, we can't remember what products you like! For the best user experience,
+                please register and login.
+              </p>
+              <Link to={'/register'}>
+                <Button basic color='teal'>Register</Button>
+              </Link>
+              <Link to={'/login'}>
+                <Button basic color='teal'>Login</Button>
+              </Link>
+            </Modal>
+          </Card>
       )
   }
 
@@ -148,6 +162,10 @@ state = {handle: '', products: [], showProduct: true, page:1, totalPages:0, open
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/products/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+          dispatch( updateUser())
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -163,6 +181,9 @@ state = {handle: '', products: [], showProduct: true, page:1, totalPages:0, open
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/hated_items/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -191,7 +212,7 @@ state = {handle: '', products: [], showProduct: true, page:1, totalPages:0, open
   }
 
   render() {
-    const {handle, loading} = this.state;
+    const {loading} = this.state;
     if (loading) {
       return (
         <Container>
@@ -201,15 +222,37 @@ state = {handle: '', products: [], showProduct: true, page:1, totalPages:0, open
     } else {
     return (
       <div>
-        { handle &&
-          <Button
-            color= 'black'
-            onClick={this.clearCategory}
-          >
-            Clear Filter: {handle}
-          </Button>
-        }
+        <Dropdown text='Filter By Category' icon='filter' centered style={styles.text} floating labeled button>
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <Link to='/womens' style={{color: '#000000'}}>
+                <Menu.Item name='Womens' />
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link to='/mens' style={{color: '#000000'}}>
+                <Menu.Item name='Mens' />
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link to='/baby' style={{color: '#000000'}}>
+                <Menu.Item name='Baby' />
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <Link to='/accessories' style={{color: '#000000'}}>
+                <Menu.Item name='Accessories' />
+              </Link>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         <Divider />
+          <Header
+              inverted color = 'teal'
+              textAlign='center'
+              size='huge'>
+                All Products
+            </Header>
           <Card.Group
             computer={8}
             mobile={2}
@@ -235,11 +278,15 @@ const styles = {
   cardStyle: {
     display: 'block',
   },
-  images: {
-    height: '12vw',
-  },
-
 }
+
+const StyledImage = styled(Image)`
+  align-items: center !important;
+  justify-content: center !important;
+  display: flex !important;
+  height: 20vh !important;
+  width: auto !important;
+`
 
 const mapStateToProps = (state, props) => {
   const { products } = state

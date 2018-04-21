@@ -20,33 +20,35 @@ import {
   Divider,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
+import {getProducts} from '../actions/products';
+import {updateUser} from '../actions/auth';
 
 class ProductView extends React.Component{
   state = { active: false, products: [], open: false }
   handleShow = () => this.setState({ active: !this.state.active })
 
-  componentDidMount() {
+    componentDidMount = () => {
     const { dispatch } = this.props;
-    axios.get('/api/my_products')
+    axios.get('/api/products')
       .then( res => {
-        dispatch(setHeaders(res.headers));
+        dispatch(setHeaders(res.headers))
         this.setState({ products: res.data })
-      });
+        dispatch(getProducts(res.products));
+    }).then(() => {
+      this.setState({loading: false});
+    })
   }
 
   handleLove = (id) => {
-    const { dispatch, history, productIndex, products } = this.props;
+    const { dispatch } = this.props;
     axios.put(`/api/products/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
-        dispatch(setHeaders(res.headers))
-        const productListLength = products.length - 1
-        if (productIndex === productListLength) {
-          history.push('/products/')
-        } else {
-          const product = products[productIndex + 1]
-          history.push(`/products/${product.id}`)
-        }
+        dispatch( updateUser())
+        // dispatch(setHeaders(res.headers))
         this.setState({
           products: this.state.products.filter( p => p.id !== id )
         })
@@ -57,22 +59,18 @@ class ProductView extends React.Component{
   }
 
   handleHate = (id) => {
-    const { dispatch, history, productIndex, products } = this.props;
+    const { dispatch } = this.props;
     axios.put(`/api/hated_items/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
       })
-    const productListLength = products.length - 1
-    if (productIndex === productListLength) {
-      history.push('/products/')
-    } else {
-      const product = products[productIndex + 1]
-      history.push(`/products/${product.id}`)
-    }
-    this.setState({
-      products: this.state.products.filter( p => p.id !== id )
-    })
+      this.setState({
+        products: this.state.products.filter( p => p.id !== id )
+      })
   }
 
   onOpenModal = () => {
@@ -83,7 +81,12 @@ class ProductView extends React.Component{
     this.setState({ open: false });
   };
 
+  getRandomInt = () => {
+      return Math.floor(Math.random() * Math.floor(54));
+  }
+
   render() {
+    let int  = this.getRandomInt()
     const { product={}, user} = this.props;
     const { active, open } = this.state
     return(
@@ -117,6 +120,7 @@ class ProductView extends React.Component{
                 <Card fluid >
                   <Image src={product.image_src} />
                     <Card.Content>
+                  <Link to={`/products/${int}`}>
                     <Button
                       icon
                       size='big'
@@ -127,24 +131,31 @@ class ProductView extends React.Component{
                       }
                     >
                       <Button.Content hidden>
-                        <Icon name='thumbs down' color='red' />
+                          <Icon name='thumbs down' color='red' />
                       </Button.Content>
-                      <Button.Content visible>Dislike</Button.Content>
-                    </Button>
-                    <Button
-                      icon
-                      size='big'
-                      animated='fade'
-                      floated='right'
-                      onClick={() =>
-                        user.id === undefined ? this.onOpenModal() : this.handleLove(product.id)
-                      }
-                    >
-                      <Button.Content hidden>
-                        <Icon name='heart' color='pink' />
+                      <Button.Content visible>
+                          Dislike
                       </Button.Content>
-                      <Button.Content visible>Love It!</Button.Content>
                     </Button>
+                  </Link>
+                    <Link to={`/products/${int}`}>
+                      <Button
+                        icon
+                        size='big'
+                        animated='fade'
+                        floated='right'
+                        onClick={() =>
+                          user.id === undefined ? this.onOpenModal() : this.handleLove(product.id)
+                        }
+                      >
+                        <Button.Content visible>
+                            Love It!
+                        </Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='heart' color='pink' />
+                        </Button.Content>
+                      </Button>
+                    </Link>
                     <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
                       <h2>You are not logged in!</h2>
                       <p>

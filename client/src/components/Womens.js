@@ -11,6 +11,8 @@ import {
   Responsive,
   Dimmer,
   Loader,
+  Dropdown,
+  Menu,
 } from 'semantic-ui-react';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -19,6 +21,7 @@ import {Link} from 'react-router-dom';
 import {getProducts} from '../actions/products';
 
 class Womens extends React.Component {
+
   state = {
     products: [],
     showProduct: true,
@@ -44,6 +47,9 @@ class Womens extends React.Component {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/products/${id}`)
+      .then( res => {
+      dispatch(setHeaders(res.headers))
+    })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -59,6 +65,9 @@ class Womens extends React.Component {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/hated_items/${id}`)
+      .then( res => {
+      dispatch(setHeaders(res.headers))
+    })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -89,6 +98,7 @@ class Womens extends React.Component {
   filterWomen = (handle) => {
     const { products, open } = this.state;
     const {user}= this.props;
+
     return products.map( p => {
       if(p.handle === "Womens" && p.show_product === true){
         return(
@@ -176,6 +186,30 @@ class Womens extends React.Component {
     } else {
       return(
         <Container>
+          <Dropdown text='Filter By Category' icon='filter' centered style={styles.text} floating labeled button>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <Link to='/products' style={{color: '#000000'}}>
+                  <Menu.Item name='All Products' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/mens' style={{color: '#000000'}}>
+                  <Menu.Item name='Mens' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/baby' style={{color: '#000000'}}>
+                  <Menu.Item name='Baby' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/accessories' style={{color: '#000000'}}>
+                  <Menu.Item name='Accessories' />
+                </Link>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <Header
             inverted color = 'teal'
             textAlign='center'
@@ -196,6 +230,9 @@ class Womens extends React.Component {
 }
 
 const styles = {
+  text: {
+    color: "#FFF",
+  },
   background: {
     backgroundColor: "black",
   },

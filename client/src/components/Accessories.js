@@ -11,6 +11,8 @@ import {
   Responsive,
   Dimmer,
   Loader,
+  Dropdown,
+  Menu,
 } from 'semantic-ui-react';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -41,11 +43,13 @@ class Accessories extends React.Component {
     })
   }
 
-
   handleLove = (id) => {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/products/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -61,6 +65,9 @@ class Accessories extends React.Component {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/hated_items/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -179,6 +186,30 @@ class Accessories extends React.Component {
     } else {
       return(
         <Container>
+          <Dropdown text='Filter By Category' icon='filter' centered style={styles.text} floating labeled button>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <Link to='/products' style={{color: '#000000'}}>
+                  <Menu.Item name='All Products' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/mens' style={{color: '#000000'}}>
+                  <Menu.Item name='Mens' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/baby' style={{color: '#000000'}}>
+                  <Menu.Item name='Baby' />
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to='/womens' style={{color: '#000000'}}>
+                  <Menu.Item name='Women' />
+                </Link>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <Header
             inverted color = 'teal'
             textAlign='center'
@@ -199,6 +230,9 @@ class Accessories extends React.Component {
 }
 
 const styles = {
+  text: {
+    color: "#FFF",
+  },
   background: {
     backgroundColor: "black",
   },
@@ -228,4 +262,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(Accessories);
+export default connect(mapStateToProps)(Accessories); 

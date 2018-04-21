@@ -9,6 +9,7 @@ class Api::HatedItemsController < ApplicationController
 
   def my_hated_products
     render json: User.hated(current_user.hated_items)
+    current_user.save
   end
 
 

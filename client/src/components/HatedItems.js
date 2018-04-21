@@ -7,7 +7,6 @@ import {
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { setHeaders } from '../actions/headers';
 
 class HatedItems extends React.Component {
@@ -19,25 +18,27 @@ class HatedItems extends React.Component {
       .then( res => {
         this.setState({ products: res.data })
         dispatch(setHeaders(res.headers));
-      }).catch( err => {
+    }).catch( err => {
         console.log(err)
-      })
+    })
   }
 
   handleClick = (id) => {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/show_products/${id}`)
+      .then( res => {
+        dispatch(setHeaders(res.headers))
+      })
     axios.delete(`/api/hated_items/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
         this.setState({
           products: products.filter( p => p.id !== id )
         })
-      })
-      .catch( err => {
+    }).catch( err => {
         console.log(err)
-      })
+    })
   }
 
   render() {

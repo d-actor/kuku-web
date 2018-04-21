@@ -11,6 +11,8 @@ import {
   Responsive,
   Dimmer,
   Loader,
+  Dropdown,
+  Menu,
 } from 'semantic-ui-react';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -46,6 +48,9 @@ class Baby extends React.Component {
     const { products } = this.state;
     const { dispatch } = this.props;
     axios.put(`/api/products/${id}`)
+      .then( res => {
+          dispatch(setHeaders(res.headers))
+        })
     axios.put(`/api/show_products/${id}`)
       .then( res => {
         dispatch(setHeaders(res.headers))
@@ -148,25 +153,27 @@ class Baby extends React.Component {
                 </Button.Content>
                 <Button.Content visible>Love It!</Button.Content>
               </Button>
-            </Card.Content>
-            <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
-              <h2>You are not logged in!</h2>
-              <p>
-                Unless you have an account with KUKU, we cannot remember what products you like! For the best user experience,
-                please register and login.
-              </p>
-              <Link to={'/register'}>
-                <Button basic color='teal'>Register</Button>
-              </Link>
-              <Link to={'/login'}>
-                <Button basic color='teal'>Login</Button>
-              </Link>
-            </Modal>
-          </Card>
-        )
-      }
-    })
-  }
+          </Card.Content>
+          <Modal open={open} onClose={this.onCloseModal} little textAlign='center'>
+            <h2>You are not logged in!</h2>
+            <p>
+              Unless you have an account with KUKU, we cannot remember what products you like! For the best user experience,
+              please register and login.
+            </p>
+            <Link to={'/register'}>
+              <Button basic color='teal'>Register</Button>
+            </Link>
+            <Link to={'/login'}>
+              <Button basic color='teal'>Login</Button>
+            </Link>
+          </Modal>
+        </Card>
+          )
+        } else  {
+          return null
+        }
+      })
+    }
 
   render() {
     const {loading} = this.state;
@@ -179,6 +186,32 @@ class Baby extends React.Component {
     } else {
       return(
         <Container>
+          <div float='left'>
+            <Dropdown text='Filter By Category' icon='filter' centered style={styles.text} floating labeled button>
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <Link to='/products' style={{color: '#000000'}}>
+                    <Menu.Item name='All Products' />
+                  </Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link to='/mens' style={{color: '#000000'}}>
+                    <Menu.Item name='Mens' />
+                  </Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link to='/womens' style={{color: '#000000'}}>
+                    <Menu.Item name='Womens' />
+                  </Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link to='/accessories' style={{color: '#000000'}}>
+                    <Menu.Item name='Accessories' />
+                  </Link>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
           <Header
             inverted color = 'teal'
             textAlign='center'
@@ -199,6 +232,9 @@ class Baby extends React.Component {
 }
 
 const styles = {
+  text: {
+    color: "#FFF",
+  },
   background: {
     backgroundColor: "black",
   },

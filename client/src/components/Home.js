@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Image, Segment, Container, Grid, Divider, Responsive, Button } from 'semantic-ui-react';
+import { Image, Segment, Container, Grid, Divider, Responsive, } from 'semantic-ui-react';
 import Tshirt from '../images/home/Kuku.main.jpg';
-import Iphone from '../images/home/IphoneX.png';
-import appIcon from '../images/home/button-appstore.png';
-import googlePlay from '../images/home/AndroidLink.png';
 import styled from 'styled-components';
-import Android from '../images/home/Android.png';
 import { Link } from 'react-router-dom';
+import ReactPlayer from 'react-player';
+import IphoneVideo from '../images/home/iphoneVideo.mp4';
+import AndroidVideo from '../images/home/android.mp4';
 
 const AppLinks = styled.div`
   display: flex;
@@ -32,12 +31,8 @@ class Home extends Component {
     return (
       <Segment basic style={ styles.mainContainer}>
         <ButtonLink>
-          <Button fluid color='black'>
-            <Link to="/products" style={styles.text}>Shop Traditionally</Link>
-          </Button>
-          <Button fluid color='black'>
-            <Link to={`/products/${int}`} style={styles.text}>Go KUKU!</Link>
-          </Button>
+          <Link to="/products" style={styles.text}>Shop Traditionally</Link>
+          <Link to={`/products/${int}`} style={styles.text}>Go KUKU!</Link>
         </ButtonLink>
         <br/>
         <Image style={styles.image} height="20" fluid centered src={Tshirt} />
@@ -51,27 +46,9 @@ class Home extends Component {
                 mobile={16}
                 tablet={8}
               >
-                <Responsive as="Image" minWidth={750}>
-                  <Image style={styles.iPhone} centered width="35%" src={Iphone}/>
+                <Responsive minWidth={750} >
+                  <ReactPlayer style ={styles.video} playing loop width='35%' height="35%" url={IphoneVideo} />
                 </Responsive>
-              </Grid.Column>
-              <Grid.Column
-                computer={8}
-                mobile={16}
-                tablet={8}
-              >
-                <h2>Try a Fun New Way To Shop.</h2>
-                <p>KUKU is your one stop shop for all your needs. When you go KUKU, your favorite shopping places all come to you in one spot. Browse through all items one by one to see what comes around (AKA 'GOING KUKU'), or you can shop the traditional way. Then once you find the items you love, all you have to do is show some love and we'll give it right back. Make your life easier by going a little KUKU!</p>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Grid>
-            <Grid.Row centered columns={3}>
-              <Grid.Column
-                computer={8}
-                mobile={16}
-                tablet={8}
-              >
                 <h2>Like Tinder But Every Match Is A Winner!</h2>
                 <p>Everyone is well aware of the simplicity of the Dating app Tinder. Sometimes, when you find your love at first sight, they might not love you back. When you go KUKU, every time you swipe right, so do we. We promise to keep this love train going as long as you do. It is about time there's a little more love in the world.</p>
               </Grid.Column>
@@ -80,36 +57,30 @@ class Home extends Component {
                 mobile={16}
                 tablet={8}
               >
-                <Responsive as="Image" minWidth={750}>
-                  <Image style={styles.Android} centered width="35%" src={Android}/>
+                <h2>Try a Fun New Way To Shop.</h2>
+                <p>KUKU is your one stop shop for all your needs. When you go KUKU, your favorite shopping places all come to you in one spot. Browse through all items one by one to see what comes around (AKA 'GOING KUKU'), or you can shop the traditional way. Then once you find the items you love, all you have to do is show some love and we'll give it right back. Make your life easier by going a little KUKU!</p>
+              <Grid.Column
+                computer={8}
+                mobile={16}
+                tablet={8}
+              >
+                 <Responsive minWidth={750} >
+                  <ReactPlayer style ={styles.androidvideo} playing loop width='35%' height="35%" url={AndroidVideo} />
                 </Responsive>
+              </Grid.Column>
               </Grid.Column>
             </Grid.Row>
           </Grid>
+          <Grid.Row centered columns={3}>
+            <Grid.Column
+              computer={8}
+              mobile={16}
+              tablet={8}
+            >
+            </Grid.Column>
+          </Grid.Row>
         </Container>
         <Divider />
-        <Container>
-          <AppLinks>
-            <Image
-              src={appIcon}
-              as='a'
-              href='https://www.apple.com/ios/app-store/'
-              size='small'
-              target='_blank'
-              rel='noopener noreferrer'
-              centered
-            />
-            <Image
-              src={googlePlay}
-              as='a'
-              href='https://play.google.com/store/apps?hl=en'
-              size='small'
-              target='_blank'
-              rel='noopener noreferrer'
-              centered
-            />
-          </AppLinks>
-        </Container>
       </Segment>
     );
   }
@@ -117,7 +88,7 @@ class Home extends Component {
 
 const styles = {
   text: {
-    color: '#ffffff',
+    color: 'teal',
   },
   main: {
     color: "#FFF",
@@ -125,12 +96,23 @@ const styles = {
   image: {
     alignSelf: "center",
   },
-
   middleContainer: {
     height:'fill',
     background: 'white',
     width: '100%',
     justifyContent: 'center',
+  },
+  video:{
+    display: 'flex',
+    alignContent: 'center',
+    margin: 'auto'
+  },
+    androidvideo:{
+    display: 'flex',
+    alignContent: 'center',
+    margin: 'auto',
+    borderRadius: '5px',
+    padding: '20px'
   },
   appIcon:{
     width: '160px'

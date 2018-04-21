@@ -9,16 +9,19 @@ class Api::ProductsController < ApplicationController
 
   def my_products
     render json: User.loved(current_user.loved_products)
+    current_user.save
   end
 
   def update
     current_user.loved_products << params[:id].to_i
     current_user.save
+    render json: current_user
   end
 
   def delete
     current_user.loved_products.delete_if{|i| i == @product.id}
     current_user.save
+    render json: current_user
   end
 
   private
