@@ -88,7 +88,7 @@ class Home extends Component {
 
 const styles = {
   text: {
-    color: 'teal',
+    color: 'white',
   },
   main: {
     color: "#FFF",
