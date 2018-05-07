@@ -28,7 +28,7 @@ import Footer from './Footer';
 class App extends Component {
   render() {
     return (
-  
+
         <Segment style={styles.background}>
           <div style = {styles.wrapper}>
             <NavBar />
@@ -57,7 +57,7 @@ class App extends Component {
           </div>
           <Footer />
         </Segment>
-  
+
     );
   }
 }
